@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'gcp.poc'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudGcpVersion', "4.8.4")
+    set('springCloudVersion', "2023.0.0")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:${springCloudGcpVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager'
+
+    implementation 'com.mysql:mysql-connector-j:8.2.0'
+    implementation 'com.google.cloud:spring-cloud-gcp-starter-pubsub'
+
+    implementation 'org.modelmapper:modelmapper:2.3.7'
+
+    implementation 'net.iakovlev:timeshape:2022g.17'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

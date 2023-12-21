@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-data
+spec:
+  selector:
+    matchLabels:
+      name: weather-data
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        name: weather-data
+    spec:
+      serviceAccountName: pod-service-account-mapped
+      automountServiceAccountToken: true
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"
+      containers:
+        - name: weather-data
+          image: europe-west8-docker.pkg.dev/srb-du04-due-13/gcp-poc-artifact-registry/weather-data:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 2
+            periodSeconds: 3
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 2
+            periodSeconds: 8
+            failureThreshold: 1
