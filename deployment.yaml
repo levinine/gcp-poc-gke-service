@@ -37,3 +37,17 @@ spec:
             timeoutSeconds: 2
             periodSeconds: 8
             failureThreshold: 1
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
+          args:
+            - "--psc"
+            - "--structured-logs"
+            - "--port=3306"
+            - "srb-du04-due-13:europe-west8:gcp-poc-mysql-instance"
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+
