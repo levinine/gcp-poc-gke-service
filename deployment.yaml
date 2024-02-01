@@ -13,7 +13,6 @@ spec:
         name: weather-data
     spec:
       serviceAccountName: pod-service-account-mapped
-      automountServiceAccountToken: true
       nodeSelector:
         iam.gke.io/gke-metadata-server-enabled: "true"
       containers:
